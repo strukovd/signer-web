@@ -1,0 +1,1 @@
+import{Marker as o}from"./BxOpyrPk.js";class s{constructor(r){if(this.map=r,!r)throw new Error("Map is not initialized")}init(){const r=(n,t)=>{const{marker:i}=window.gpMapStore;i&&i.destroy(),window.gpMapStore.marker=new o(this.map,t?.coordinates)};this.map.addChild(new ymaps3.YMapListener({onClick:r}))}}export{s as Listener};
