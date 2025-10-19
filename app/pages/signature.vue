@@ -18,7 +18,7 @@
 			</aside>
 		</main>
 		<footer class="footer">
-			<BaseButton style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
+			<BaseButton @click="navigateTo('/map')" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
 		</footer>
 	</section>
 </template>

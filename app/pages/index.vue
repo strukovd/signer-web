@@ -3,8 +3,8 @@
 		<main class="PDF-wrapper">
 			<PDF path="file.pdf"/>
 		</main>
-		<footer class="options" style="padding:1em; display:flex;">
-			<BaseButton style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
+		<footer class="footer" style="padding:1em; display:flex;">
+			<BaseButton @click="navigateTo('/signature')" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
 		</footer>
 	</section>
 </template>
@@ -26,7 +26,7 @@ import BaseButton from '~/components/common/BaseButton.vue';
 		padding:1em;
 	}
 
-	.options {
+	.footer {
 		.base-button {
 			.button-text {
 				font-family: "Carlito", Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
