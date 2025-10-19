@@ -13,4 +13,7 @@ export default defineNuxtConfig({
 	nitro: { // Для генерации статических файлов
 		preset: 'github-pages',
 	},
+	app: {
+		baseURL: process.env.BASE_URL ?? '/',
+	},
 })
