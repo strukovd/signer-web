@@ -9,4 +9,8 @@ export default defineNuxtConfig({
 	],
 
 	modules: ['nuxt-signature-pad'],
+
+	nitro: { // Для генерации статических файлов
+		preset: 'github-pages',
+	},
 })
