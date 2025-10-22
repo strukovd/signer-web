@@ -3,7 +3,7 @@
 		<main class="PDF-wrapper">
 			<PDF path="file.pdf"/>
 		</main>
-		<footer class="footer" style="padding:1em; display:flex;">
+		<footer class="footer">
 			<BaseButton @click="navigateTo('/signature')" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
 		</footer>
 	</section>
@@ -17,13 +17,10 @@ import BaseButton from '~/components/common/BaseButton.vue';
 
 <style lang="scss">
 .main-page {
-	height: 100vh;
-	// margin:auto auto;
-
 	.PDF-wrapper {
-		height:90vh;
-		overflow:auto;
-		padding:1em;
+		// height:90vh;
+		// overflow:auto;
+		// padding:1em;
 	}
 
 	.footer {

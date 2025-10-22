@@ -66,24 +66,12 @@ const handleAddWaterMark = () => {
 
 <style lang="scss">
 .signature-page {
-	$padding-size: .6em;
-	height: 100vh;
-	display: flex;
-	gap:$padding-size;
-	flex-direction: column;
-	// margin:auto auto;
-
 	.signature-pad-wrapper {
 		position: relative;
-		padding:$padding-size $padding-size 0 $padding-size;
 		flex:auto 1 0;
-		// overflow:auto;
 	}
 
 	.footer {
-		padding:0 $padding-size $padding-size $padding-size;
-		display: flex;
-
 		.base-button {
 			.button-text {
 				font-family: "Carlito", Segoe UI, Tahoma, Geneva, Verdana, sans-serif;

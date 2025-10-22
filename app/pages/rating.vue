@@ -28,18 +28,7 @@ import BaseButton from '~/components/common/BaseButton.vue';
 
 <style lang="scss">
 .rating-page {
-	$padding-size: .6em;
-	height: 100vh;
-	display: flex;
-	gap:$padding-size;
-	flex-direction: column;
-	// margin:auto auto;
-
 	.rating-wrapper {
-		position: relative;
-		padding:$padding-size $padding-size 0 $padding-size;
-		flex:auto 1 0;
-
 		h1 {
 			text-align: center;
 			font-size: 2.4em;
@@ -71,9 +60,6 @@ import BaseButton from '~/components/common/BaseButton.vue';
 	}
 
 	.footer {
-		padding:0 $padding-size $padding-size $padding-size;
-		display: flex;
-
 		.base-button {
 			.button-text {
 				font-family: "Carlito", Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
