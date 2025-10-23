@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 		'@mdi/font/css/materialdesignicons.min.css',
 	],
 
-	modules: ['nuxt-signature-pad'],
+	modules: ['nuxt-signature-pad', '@pinia/nuxt'],
 
 	nitro: { // Для генерации статических файлов
 		preset: 'github-pages',
