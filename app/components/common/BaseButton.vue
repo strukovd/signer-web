@@ -53,7 +53,7 @@ export default defineComponent({
 	user-select: none;
 	transition:all 300ms ease 0s;
 	border-style: none;
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	gap: .3em;
 
