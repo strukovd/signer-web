@@ -15,12 +15,23 @@ export default defineNuxtConfig({
 	},
 	app: {
 		baseURL: process.env.BASE_URL ?? '/',
+		head: {
+			link: [
+				{ rel: 'manifest', href: '/manifest.json' },
+				{ rel: 'icon', href: '/favicon.ico' }
+			],
+			meta: [
+				{ name: 'theme-color', content: '#4A90E2' },
+				{ name: 'mobile-web-app-capable', content: 'yes' }
+			]
+		}
 	},
 
 	runtimeConfig: {
 		public: {
 			// Префикс для API
 			apiURL: process.env.NUXT_PUBLIC_API_BASE ?? 'https://api.gazprom.kg/api',
+			wsURL: process.env.NUXT_PUBLIC_WS_BASE ?? 'wss://api.gazprom.kg', // ?deviceId=1234567',
 
 			// Токен
 			apiToken: process.env.NUXT_PUBLIC_API_TOKEN,
