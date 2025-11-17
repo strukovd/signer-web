@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 		'@mdi/font/css/materialdesignicons.min.css',
 	],
 
-	modules: ['nuxt-signature-pad', '@pinia/nuxt', 'nuxt-swiper'],
+	modules: ['nuxt-signature-pad', '@pinia/nuxt', 'nuxt-swiper', '@vite-pwa/nuxt'],
 
 	nitro: { // Для генерации статических файлов
 		preset: 'github-pages',
@@ -31,9 +31,10 @@ export default defineNuxtConfig({
 		public: {
 			// Префикс для API
 			apiURL: process.env.NUXT_PUBLIC_API_BASE ?? 'https://api.gazprom.kg/api',
+			wsURL: process.env.NUXT_PUBLIC_WS_BASE ?? 'wss://api.gazprom.kg', // ?deviceId=1234567',
 
 			// Токен
-			apiToken: process.env.NUXT_PUBLIC_API_TOKEN,
+			apiToken: process.env.NUXT_PUBLIC_API_TOKEN ?? '5ROtG52b5lq5ib6q1web91z5asfAs15h21d12sf1a12b5HG',
 		},
 	},
 })
