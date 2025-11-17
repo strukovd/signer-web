@@ -15,10 +15,11 @@ export default defineNuxtConfig({
 	},
 	app: {
 		baseURL: process.env.BASE_URL ?? '/',
+		buildAssetsDir: 'assets/',
 		head: {
 			link: [
-				{ rel: 'manifest', href: '/manifest.json' },
-				{ rel: 'icon', href: '/favicon.ico' }
+				{ rel: 'manifest', href: 'manifest.json' },
+				{ rel: 'icon', href: 'favicon.ico' }
 			],
 			meta: [
 				{ name: 'theme-color', content: '#4A90E2' },
@@ -37,4 +38,22 @@ export default defineNuxtConfig({
 			apiToken: process.env.NUXT_PUBLIC_API_TOKEN,
 		},
 	},
+
+	pwa: {
+		manifest: {
+			name: "OfficeApp",
+			short_name: "OfficeApp",
+			start_url: "/signer-web/",
+			display: "standalone",
+			theme_color: "#4A90E2",
+			icons: [
+				{
+					src: "icon-192x192.webp",
+					sizes: "192x192",
+					type: "image/webp"
+				}
+			]
+		},
+		registerType: 'autoUpdate'
+	}
 })

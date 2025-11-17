@@ -1,5 +1,3 @@
-import { defineNuxtPlugin } from '#app';
-
 export default defineNuxtPlugin((nuxtApp) => {
 	const config = useRuntimeConfig();
 
@@ -16,11 +14,9 @@ export default defineNuxtPlugin((nuxtApp) => {
 				}
 			}
 		},
-		onResponse({ response }) {
-			// централизованная обработка
+		onResponse({ response }) { // централизованная обработка
 		},
-		onResponseError({ response }) {
-			// логика на 401/403/500 и т.п.
+		onResponseError({ response }) { // логика на 401/403/500 и т.п.
 		},
 	});
 
