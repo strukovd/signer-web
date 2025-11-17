@@ -34,7 +34,7 @@ export default defineNuxtConfig({
 			wsURL: process.env.NUXT_PUBLIC_WS_BASE ?? 'wss://api.gazprom.kg', // ?deviceId=1234567',
 
 			// Токен
-			apiToken: process.env.NUXT_PUBLIC_API_TOKEN ?? '5ROtG52b5lq5ib6q1web91z5asfAs15h21d12sf1a12b5HG',
+			apiToken: process.env.NUXT_PUBLIC_API_TOKEN,
 		},
 	},
 })

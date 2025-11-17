@@ -31,6 +31,7 @@ jobs:
       - name: Build project
         env:
           BASE_URL: /signer-web/ # /${{ github.event.repository.name }}/
+          NUXT_PUBLIC_API_TOKEN: 5ROtG52b5lq5ib6q1web91z5asfAs15h21d12sf1a12b5HG
         run: npm run build
 
       - name: Deploy to GitHub Pages
