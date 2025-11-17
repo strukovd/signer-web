@@ -12,6 +12,7 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@pinia/nuxt": "^0.11.2",
+    "@vite-pwa/nuxt": "^1.0.7",
     "@yandex/ymaps3-types": "^1.0.17734864",
     "nuxt": "^4.1.3",
     "nuxt-signature-pad": "^1.6.0",
