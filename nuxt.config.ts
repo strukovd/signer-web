@@ -15,6 +15,16 @@ export default defineNuxtConfig({
 	},
 	app: {
 		baseURL: process.env.BASE_URL ?? '/',
+		head: {
+			link: [
+				{ rel: 'manifest', href: '/manifest.json' },
+				{ rel: 'icon', href: '/favicon.ico' }
+			],
+			meta: [
+				{ name: 'theme-color', content: '#4A90E2' },
+				{ name: 'mobile-web-app-capable', content: 'yes' }
+			]
+		}
 	},
 
 	runtimeConfig: {
