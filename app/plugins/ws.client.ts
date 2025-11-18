@@ -5,7 +5,14 @@ export default defineNuxtPlugin((nuxtApp) => {
 	const token = localStorage.getItem('token');
 	if(!token) return;
 
-	const URL = config.public.wsURL + `?deviceId=12345`;
+	let deviceId = localStorage.getItem('deviceId');
+	if(!deviceId) {
+		const randomId = Math.random().toString(36).substring(2, 9);
+		localStorage.setItem('deviceId', randomId);
+		deviceId = randomId;
+	}
+
+	const URL = config.public.wsURL + `?deviceId=${deviceId}`;
 	const socket = io(URL, {
 		// transports: ["polling", "websocket"],
 		// autoConnect: true,
