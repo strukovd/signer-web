@@ -4,7 +4,7 @@
 			<p>Спасибо за отзыв!</p>
 		</main>
 		<footer class="footer">
-			<BaseButton @click="navigateTo('/')" style="flex:auto 1 0;" append-icon="mdi-arrow-right">В НАЧАЛО</BaseButton>
+			<BaseButton @click="appStore.nextPage()" style="flex:auto 1 0;" append-icon="mdi-arrow-right">В НАЧАЛО</BaseButton>
 		</footer>
 	</section>
 </template>
@@ -12,6 +12,7 @@
 <script lang="ts" setup>
 import BaseButton from '~/components/common/BaseButton.vue';
 
+const appStore = useAppStore();
 </script>
 
 <style lang="scss">

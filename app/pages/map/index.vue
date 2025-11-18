@@ -4,7 +4,7 @@
 			<YaMap/>
 		</main>
 		<footer class="footer">
-			<BaseButton @click="navigateTo('/rating')" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
+			<BaseButton @click="appStore.nextPage()" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
 		</footer>
 	</section>
 </template>
@@ -12,6 +12,8 @@
 <script lang="ts" setup>
 import BaseButton from '~/components/common/BaseButton.vue';
 import YaMap from './YaMap.vue';
+
+const appStore = useAppStore();
 </script>
 
 <style lang="scss">

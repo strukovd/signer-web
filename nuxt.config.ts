@@ -15,7 +15,7 @@ export default defineNuxtConfig({
 	},
 	app: {
 		baseURL: process.env.BASE_URL ?? '/',
-		buildAssetsDir: 'assets/',
+		// buildAssetsDir: 'assets/',
 		head: {
 			link: [
 				{ rel: 'manifest', href: 'manifest.json' },
@@ -39,21 +39,21 @@ export default defineNuxtConfig({
 		},
 	},
 
-	pwa: {
-		manifest: {
-			name: "OfficeApp",
-			short_name: "OfficeApp",
-			start_url: "/signer-web/",
-			display: "standalone",
-			theme_color: "#4A90E2",
-			icons: [
-				{
-					src: "icon-192x192.webp",
-					sizes: "192x192",
-					type: "image/webp"
-				}
-			]
-		},
-		registerType: 'autoUpdate'
-	}
+	// pwa: {
+	// 	manifest: {
+	// 		name: "OfficeApp",
+	// 		short_name: "OfficeApp",
+	// 		start_url: "/signer-web/",
+	// 		display: "standalone",
+	// 		theme_color: "#4A90E2",
+	// 		icons: [
+	// 			{
+	// 				src: "icon-192x192.webp",
+	// 				sizes: "192x192",
+	// 				type: "image/webp"
+	// 			}
+	// 		]
+	// 	},
+	// 	registerType: 'autoUpdate'
+	// }
 })

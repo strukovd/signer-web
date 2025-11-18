@@ -46,29 +46,9 @@ async function signIn() {
 		body: { login: login.value, password: password.value },
 	})
 		.then((data) => {
-			console.log(`data: `);
-			console.log(data);
-
 			if(data.accessToken) {
 				useUserStore().setData(data);
 				navigateTo('/');
-
-
-				// switch( String(data.userData.role).toUpperCase() ) {
-				// 	case 'CONTRACTOR':
-				// 		navigateTo('/issues');
-				// 		break;
-				// 	case 'ADMIN':
-				// 		navigateTo('/issues');
-				// 		break;
-				// 	case 'CALLCENTER':
-				// 		navigateTo('/readings');
-				// 		break;
-
-				// 	default:
-				// 		navigateTo('/');
-				// 		break;
-				// }
 			}
 		})
 		.catch((err: FetchError) => {

@@ -1,4 +1,6 @@
 import { io } from "socket.io-client";
+import type { SocketPagePayload } from "~/types";
+
 
 export default defineNuxtPlugin((nuxtApp) => {
 	const config = useRuntimeConfig();
@@ -32,10 +34,16 @@ export default defineNuxtPlugin((nuxtApp) => {
 		console.log("🔌 Socket disconnected");
 	});
 
-	socket.onAny((eventName, ...args) => {
-		console.log(`Event: ${eventName}`);
-		console.log(`Arguments:`, args);
+	socket.on("page", (data: SocketPagePayload) => {
+		// console.log(`Event: page`);
+		// console.log(data);
+		useAppStore().pages = data.pages;
 	});
+
+	// socket.onAny((eventName, ...args) => {
+	// 	console.log(`Event: ${eventName}`);
+	// 	console.log(`Arguments:`, args);
+	// });
 
 
 	socket.on("connect_error", (err) => {

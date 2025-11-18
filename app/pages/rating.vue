@@ -16,7 +16,7 @@
 			</div>
 		</main>
 		<footer class="footer">
-			<BaseButton @click="navigateTo('/finish')" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
+			<BaseButton @click="appStore.nextPage()" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
 		</footer>
 	</section>
 </template>
@@ -24,6 +24,7 @@
 <script lang="ts" setup>
 import BaseButton from '~/components/common/BaseButton.vue';
 
+const appStore = useAppStore();
 </script>
 
 <style lang="scss">
