@@ -1,7 +1,7 @@
 <template>
 	<section class="main-page">
 		<main class="PDF-wrapper">
-			<PDF path="file.pdf"/>
+			<!-- <PDF source="file.pdf"/> -->
 		</main>
 		<footer class="footer">
 			<BaseButton @click="appStore.nextPage()" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>

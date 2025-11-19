@@ -1,6 +1,5 @@
 <template>
 	<NuxtLayout>
-		{{ currentPage.type }}
 		<NuxtPage :pageKey="currentPage.type"/>
 	</NuxtLayout>
 </template>
@@ -39,6 +38,15 @@ if(import.meta.client) {
 		{ immediate: true }
 	);
 }
+
+
+// function setVh() {
+// 	const vh = window.innerHeight * 0.01;
+// 	document.documentElement.style.setProperty('--vh', `${vh}px`);
+// }
+
+// setVh();
+// window.addEventListener('resize', setVh);
 </script>
 
 <style lang="scss">
@@ -49,5 +57,13 @@ body {
 	background-color: #e0f2fe;
     color: #183d6d;
     font-family: "Carlito", Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+
+	height: calc(var(--vh) * 100);
+	padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+html, body {
+    overscroll-behavior-y: none;
 }
 </style>

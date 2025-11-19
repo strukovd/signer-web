@@ -1,7 +1,7 @@
 <template>
 	<ClientOnly>
-		<VuePdfEmbed
-			:source="path"
+		<VuePdfEmbed v-if="source"
+			:source="source"
 			annotation-layer
 			text-layer
 		/>
@@ -14,7 +14,7 @@
 	import 'vue-pdf-embed/dist/styles/textLayer.css';
 
 	const props = defineProps({
-		path: String
+		source: String
 	});
 
 </script>

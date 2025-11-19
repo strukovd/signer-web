@@ -1,9 +1,9 @@
 {
-  "name": "OfficeApp",
-  "short_name": "OfficeApp",
+  "name": "SignerApp",
+  "short_name": "SignerApp",
   "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
+  "display": "fullscreen",
+  "display_override": ["window-controls-overlay"],
   "theme_color": "#4A90E2",
   "icons": [
     {

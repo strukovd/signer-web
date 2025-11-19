@@ -12,9 +12,9 @@ npm run build
 
 tar -czf "${ARCHIVE_NAME}" -C .output/public .
 
-scp -i "${SSH_KEY}" "${ARCHIVE_NAME}" "${REMOTE_HOST}:${REMOTE_TMP}"
+scp "${ARCHIVE_NAME}" "${REMOTE_HOST}:${REMOTE_TMP}"
 
-ssh -t -i "${SSH_KEY}" "${REMOTE_HOST}" "\
+ssh -t "${REMOTE_HOST}" "\
 	rm -rf ${TARGET_DIR} && \
 	mkdir -p ${TARGET_DIR} && \
 	tar -xzf ${REMOTE_TMP} -C ${TARGET_DIR} && \
