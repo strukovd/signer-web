@@ -1,32 +1,84 @@
 <template>
 	<section class="signature-page">
 		<main class="signature-pad-wrapper">
-			<NuxtSignaturePad
+			<template v-if="stage === `SHOW_DOCUMENT`">
+				<PDF v-if="documentContent" :source="documentContent"/>
+			</template>
+			<template v-else-if="stage === `TO_SIGN`">
+				<NuxtSignaturePad
 				ref="signature"
-				width="100%"
-				height="100%"
-				:max-width="options.maxWidth"
-				:min-width="options.minWidth"
-				:options="{
-					penColor: options.penColor,
-					backgroundColor: options.backgroundColor,
-				}"
-			/>
-			<aside style="position:absolute; bottom:.5em; right:1.1em; display:flex; gap:.5em">
-				<BaseButton @click="handleUndo" append-icon="mdi-undo" variant="secondary"></BaseButton>
-				<BaseButton @click="handleClear" append-icon="mdi-delete" variant="secondary"></BaseButton>
-			</aside>
+					width="100%"
+					height="100%"
+					:max-width="options.maxWidth"
+					:min-width="options.minWidth"
+					:options="{
+						penColor: options.penColor,
+						backgroundColor: options.backgroundColor,
+					}"
+				/>
+				<aside style="position:absolute; bottom:.5em; right:1.1em; display:flex; gap:.5em">
+					<BaseButton @click="handleUndo" append-icon="mdi-undo" variant="secondary"></BaseButton>
+					<BaseButton @click="handleClear" append-icon="mdi-delete" variant="secondary"></BaseButton>
+				</aside>
+			</template>
 		</main>
 		<footer class="footer">
-			<BaseButton @click="appStore.nextPage()" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
+			<BaseButton @click="next" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
 		</footer>
 	</section>
 </template>
 
 <script lang="ts" setup>
+const { $api } = useNuxtApp();
 import BaseButton from '~/components/common/BaseButton.vue';
 
+type DocumentResult = { fileName: string; fileContent: string };
+
+onMounted(() => {
+	fetchDocument();
+});
+
 const appStore = useAppStore();
+const stage = ref(`SHOW_DOCUMENT`) as Ref<`SHOW_DOCUMENT` | `TO_SIGN` | `SHOW_SIGNATURE`>;
+let documentContent = ref(null) as Ref<any>;
+
+function next() {
+	switch(stage.value) {
+		case `SHOW_DOCUMENT`:
+			stage.value = `TO_SIGN`;
+			break;
+		case `TO_SIGN`:
+			toSignDocument(appStore.pages[ appStore.pageOffset ]?.documentId);
+			// stage.value = `SHOW_SIGNATURE`;
+			break;
+		case `SHOW_SIGNATURE`:
+			break;
+	}
+	// appStore.nextPage();
+}
+
+
+async function fetchDocument() {
+	const documentId = appStore.pages[ appStore.pageOffset ]?.documentId;
+	if(!documentId) return;
+
+	$api(`v1/office-app/documents`, {
+		method: 'GET',
+		params: { documentId },
+		headers: { 'auth-token': localStorage.getItem('token') } as Record<string, string>,
+	})
+		.then((data: any) => {
+			const blob = new Blob([Uint8Array.from(atob(data.fileContent), c => c.charCodeAt(0))], {
+				type: 'application/pdf',
+			});
+			documentContent.value = URL.createObjectURL(blob);
+
+			// documentContent.value = `data:application/pdf;base64,${data.fileContent}`;
+		})
+		// .catch((err: FetchError) => {
+		// 	error.value = err.message;
+		// });
+}
 
 
 const options = ref({
