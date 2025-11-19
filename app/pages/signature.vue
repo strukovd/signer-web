@@ -1,12 +1,12 @@
 <template>
 	<section class="signature-page">
 		<main class="signature-pad-wrapper">
-			<template v-if="stage === `SHOW_DOCUMENT`">
+			<template v-if="[`SHOW_DOCUMENT`, `SHOW_SIGNED_DOCUMENT`].includes(stage)">
 				<PDF v-if="documentContent" :source="documentContent"/>
 			</template>
 			<template v-else-if="stage === `TO_SIGN`">
 				<NuxtSignaturePad
-				ref="signature"
+					ref="signaturePad"
 					width="100%"
 					height="100%"
 					:max-width="options.maxWidth"
@@ -39,7 +39,7 @@ onMounted(() => {
 });
 
 const appStore = useAppStore();
-const stage = ref(`SHOW_DOCUMENT`) as Ref<`SHOW_DOCUMENT` | `TO_SIGN` | `SHOW_SIGNATURE`>;
+const stage = ref(`SHOW_DOCUMENT`) as Ref<`SHOW_DOCUMENT` | `TO_SIGN` | `SHOW_SIGNED_DOCUMENT`>;
 let documentContent = ref(null) as Ref<any>;
 
 function next() {
@@ -48,15 +48,21 @@ function next() {
 			stage.value = `TO_SIGN`;
 			break;
 		case `TO_SIGN`:
-			toSignDocument(appStore.pages[ appStore.pageOffset ]?.documentId);
-			// stage.value = `SHOW_SIGNATURE`;
+			toSignDocument();
+			stage.value = `SHOW_SIGNED_DOCUMENT`;
 			break;
-		case `SHOW_SIGNATURE`:
+		case `SHOW_SIGNED_DOCUMENT`:
 			break;
 	}
 	// appStore.nextPage();
 }
 
+async function base64ToFile(base64String: string, fileName: string, mimeType: string) {
+  const dataUrl = base64String.startsWith('data:') ? base64String : `data:${mimeType};base64,${base64String}`;
+  const response = await fetch(dataUrl);
+  const blob = await response.blob();
+  return new File([blob], fileName, { type: mimeType });
+}
 
 async function fetchDocument() {
 	const documentId = appStore.pages[ appStore.pageOffset ]?.documentId;
@@ -80,6 +86,37 @@ async function fetchDocument() {
 		// });
 }
 
+async function toSignDocument() {
+	const documentId = appStore.pages[ appStore.pageOffset ]?.documentId;
+	if(!documentId) return;
+
+	const signature = signaturePad.value.saveSignature();
+	const signatureFile = await base64ToFile(signature, 'signature.png', 'image/png');
+
+	const formData = new FormData();
+	formData.append('files',  signatureFile);
+	formData.append('documentId', String(documentId));
+
+
+	$api(`v1/office-app/documents/signature`, {
+		method: 'POST',
+
+		headers: {
+			// 'Content-Type': 'multipart/form-data',
+			'auth-token': localStorage.getItem('token'),
+		} as Record<string, string>,
+		body: formData,
+	})
+		.then((data: any) => {
+			const blob = new Blob([Uint8Array.from(atob(data.fileContent), c => c.charCodeAt(0))], {
+				type: 'application/pdf',
+			});
+			documentContent.value = URL.createObjectURL(blob);
+		})
+		// .catch((err: FetchError) => {
+		// 	error.value = err.message;
+		// });
+}
 
 const options = ref({
   penColor: '#183d6d',
@@ -87,24 +124,24 @@ const options = ref({
   maxWidth: 4,
   minWidth: 1,
 });
-const signature = ref();
+const signaturePad = ref();
 
 const handleSave = (format?: string) => {
-  return alert(signature.value.saveSignature(format))
+  return alert(signaturePad.value.saveSignature(format))
 };
 const handleClear = () => {
-  return signature.value.clearCanvas();
+  return signaturePad.value.clearCanvas();
 };
 const handleUndo = () => {
-  return signature.value.undo();
+  return signaturePad.value.undo();
 };
 
 const handleFromDataURL = (url: string) => {
-  return signature.value.fromDataURL(url);
+  return signaturePad.value.fromDataURL(url);
 };
 
 const handleAddWaterMark = () => {
-    return signature.value.addWaterMark({
+    return signaturePad.value.addWaterMark({
     text: "Watermark",          // watermark text, > default ''
     font: "20px Arial",         // mark font, > default '20px sans-serif'
     style: 'all',               // fillText and strokeText,  'all'/'stroke'/'fill', > default 'fill
