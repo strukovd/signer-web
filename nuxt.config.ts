@@ -19,7 +19,7 @@ export default defineNuxtConfig({
 		head: {
 			link: [
 				{ rel: 'manifest', href: 'manifest.json' },
-				{ rel: 'icon', href: 'favicon.ico' }
+				{ rel: 'icon', href: 'favicon.webp' }
 			],
 			meta: [
 				{ name: 'theme-color', content: '#4A90E2' },
