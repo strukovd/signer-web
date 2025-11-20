@@ -35,8 +35,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 	});
 
 	socket.on("page", (data: SocketPagePayload) => {
-		// console.log(`Event: page`);
-		// console.log(data);
+		console.log(`Event: page`);
+		console.log(data);
+		useAppStore().login = data.login;
+		useAppStore().currentUser = data.jiraUser;
 		useAppStore().pages = data.pages;
 	});
 

@@ -54,7 +54,6 @@ async function signIn() {
 		.catch((err: FetchError) => {
 			error.value = err.message;
 		});
-
 }
 
 

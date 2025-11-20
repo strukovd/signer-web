@@ -1,18 +1,19 @@
 <template>
-	<NuxtLayout>
-		<NuxtPage :pageKey="currentPage.type"/>
-	</NuxtLayout>
-</template>
+		<NuxtLayout>
+			<NuxtPage :pageKey="pageInstanceKey"/>
+		</NuxtLayout>
+	</template>
 
 <script lang="ts" setup>
 import type { Page } from './types';
 
 const fallbackPage: Page = { type: 'DEFAULT' };
+const appStore = useAppStore();
 
 const currentPage = computed<Page>(() => {
-	const appStore = useAppStore();
 	return appStore.pages[ appStore.pageOffset ] ?? fallbackPage;
 });
+const pageInstanceKey = computed(() => `${currentPage.value.type}-${appStore.pageOffset}`);
 
 const router = useRouter();
 const route = useRoute();
@@ -27,26 +28,36 @@ const pageRoutes: Record<Page['type'], string> = {
 };
 
 if(import.meta.client) {
-	watch(
-		() => currentPage.value.type,
-		(type) => {
-			const targetPath = pageRoutes[type] ?? pageRoutes.DEFAULT;
-			if(route.path === targetPath) return;
+	const updateViewportHeight = () => {
+		document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+	};
 
+	onMounted(() => {
+		updateViewportHeight();
+		window.addEventListener('resize', updateViewportHeight);
+	});
+
+	onBeforeUnmount(() => {
+		window.removeEventListener('resize', updateViewportHeight);
+	});
+
+	watch(
+		() => [appStore.pageOffset, currentPage.value.type],
+		([offset, type]) => {
+			console.log(`offset ${offset}`);
+			console.log(`новый тип: ${type}`);
+
+			const targetPath = pageRoutes[type] ?? pageRoutes.DEFAULT;
+			// if(route.path === targetPath) return;
+			console.log(`текущю страница: ${route.path}`);
+			console.log(`куда нужно перейти: ${targetPath}\n\n`);
+
+			// router.go(targetPath);
 			router.replace(targetPath);
 		},
 		{ immediate: true }
 	);
 }
-
-
-// function setVh() {
-// 	const vh = window.innerHeight * 0.01;
-// 	document.documentElement.style.setProperty('--vh', `${vh}px`);
-// }
-
-// setVh();
-// window.addEventListener('resize', setVh);
 </script>
 
 <style lang="scss">
@@ -54,16 +65,15 @@ if(import.meta.client) {
 
 body {
 	margin: 0;
+	padding: 0;
 	background-color: #e0f2fe;
-    color: #183d6d;
-    font-family: "Carlito", Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
-
-	height: calc(var(--vh) * 100);
+	color: #183d6d;
+	font-family: "Carlito", Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+	height: calc(var(--vh, 1vh) * 100);
 	padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
 }
 
 html, body {
-    overscroll-behavior-y: none;
+	overscroll-behavior-y: none;
 }
 </style>

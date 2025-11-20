@@ -18,7 +18,7 @@ const appStore = useAppStore();
 <style lang="scss">
 .finish-page {
 	$padding-size: .6em;
-	height: 100vh;
+	// height: 100vh;
 	display: flex;
 	gap:$padding-size;
 	flex-direction: column;
