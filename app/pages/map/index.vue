@@ -1,5 +1,5 @@
 <template>
-	<section class="map-page">
+	<section class="map-page">ss
 		<main class="map-wrapper">
 			<YaMap/>
 		</main>
