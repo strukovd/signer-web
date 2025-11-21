@@ -1,0 +1,1 @@
+.default-layout>[class$=page]{display:flex;flex-direction:column;min-height:calc(var(--vh, 1vh)*100)}.default-layout>[class$=page]>:first-child{flex:auto 1 1;overflow:auto}.default-layout>[class$=page]>:nth-child(2){display:flex;margin-top:auto;padding:1em}
