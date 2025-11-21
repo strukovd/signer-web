@@ -29,11 +29,11 @@ export const useUserStore = defineStore('user', {
 			// }
 		},
 
-		clear() {
+		loguot() {
 			this.token = null;
 			this.userData = null;
 			localStorage.removeItem('token');
-			// localStorage.removeItem('user');
+			navigateTo('/login');
 		}
 	}
 });

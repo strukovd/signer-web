@@ -52,9 +52,9 @@ function next() {
 			stage.value = `SHOW_SIGNED_DOCUMENT`;
 			break;
 		case `SHOW_SIGNED_DOCUMENT`:
-			break;
+			appStore.nextPage();
+			return;
 	}
-	// appStore.nextPage();
 }
 
 async function base64ToFile(base64String: string, fileName: string, mimeType: string) {
@@ -65,7 +65,7 @@ async function base64ToFile(base64String: string, fileName: string, mimeType: st
 }
 
 async function fetchDocument() {
-	const documentId = appStore.pages[ appStore.pageOffset ]?.documentId;
+	const documentId = appStore.pageParams().documentId;
 	if(!documentId) return;
 
 	$api(`v1/office-app/documents`, {
@@ -87,7 +87,7 @@ async function fetchDocument() {
 }
 
 async function toSignDocument() {
-	const documentId = appStore.pages[ appStore.pageOffset ]?.documentId;
+	const documentId = appStore.pageParams().documentId;
 	if(!documentId) return;
 
 	const signature = signaturePad.value.saveSignature();
@@ -163,6 +163,7 @@ const handleAddWaterMark = () => {
 	}
 
 	.footer {
+		flex:auto 0 0;
 		.base-button {
 			.button-text {
 				font-family: "Carlito", Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
