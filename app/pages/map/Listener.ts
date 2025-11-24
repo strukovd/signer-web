@@ -16,7 +16,6 @@ export class Listener {
 
 		this.map.addChild(new ymaps3.YMapListener({
 			onClick: onClick as DomEventHandler,
-			// onMouseDown: onMouseDown as DomEventHandler
 		}));
 	}
 }

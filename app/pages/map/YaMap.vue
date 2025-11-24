@@ -1,14 +1,11 @@
 <template>
-	<div id="map" style="width:100%; height:100%;">
-		<slot></slot>
-	</div>
+	<div id="map" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { YMap } from "@yandex/ymaps3-types";
-import { Listener } from './Listener.ts';
-import type { YMapMarker } from '@yandex/ymaps3-types';
+import { Listener } from './Listener';
 import type { Marker } from './Marker.js';
 
 declare global {
@@ -92,7 +89,7 @@ export default defineComponent({
 			const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer } = ymaps3;
 
 			// Иницилиазируем карту
-			const el = document.getElementById('map');
+			const el = document.querySelector('#map');
 			if(!el) {
 				console.error('Element #map not found');
 				return;
@@ -118,12 +115,6 @@ export default defineComponent({
 	},
 	async mounted() {
 		if(!window.gpMapStore) window.gpMapStore = {};
-		window.gpMapStore.popupClose = () => {
-			const { map, popup } = window.gpMapStore;
-			if(!popup) return;
-			map.removeChild(popup);
-			window.gpMapStore.popup = null;
-		};
 		await this.initMap();
 	}
 });
