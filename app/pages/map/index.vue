@@ -1,7 +1,7 @@
 <template>
 	<section class="map-page">
 		<main class="map-wrapper">
-			<YaMap/>
+			<YaMap v-model="selectedCoordinates"/>
 		</main>
 		<footer class="footer">
 			<BaseButton @click="saveCoordinates" style="flex:auto 1 0;" append-icon="mdi-arrow-right">ДАЛЕЕ</BaseButton>
@@ -10,14 +10,22 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import BaseButton from '~/components/common/BaseButton.vue';
 import YaMap from './YaMap.vue';
 
 const { $api } = useNuxtApp();
 const appStore = useAppStore();
+const selectedCoordinates = ref<[number, number] | null>(null);
 
 
-async function saveCoordinates(coordinates: string) {
+async function saveCoordinates() {
+	if(!selectedCoordinates.value) {
+		console.warn('Координаты не выбраны');
+		return;
+	}
+
+	const coordinatesPayload = selectedCoordinates.value.join(',');
 	const issueKey = appStore.pageParams().issueKey;
 	const operator = appStore.login;
 
@@ -26,7 +34,7 @@ async function saveCoordinates(coordinates: string) {
 		method: 'POST',
 		body: {
 			issueKey,
-			coordinates,
+			coordinates: coordinatesPayload,
 			operator: operator,
 		},
 	})

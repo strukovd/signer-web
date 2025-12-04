@@ -6,7 +6,6 @@ ARCHIVE_NAME="signer-build.tar.gz"
 REMOTE_TMP="/tmp/${ARCHIVE_NAME}"
 REMOTE_HOST="root@5.23.48.222"
 TARGET_DIR="/var/www/signer"
-SSH_KEY="~/.ssh/id_rsa"
 
 npm run build
 

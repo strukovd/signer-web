@@ -3,17 +3,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import type { YMap } from "@yandex/ymaps3-types";
 import { Listener } from './Listener';
-import type { Marker } from './Marker.js';
+import { Marker } from './Marker';
+import type { YMapMarker } from '@yandex/ymaps3-types';
+
+type Coordinates = [number, number];
 
 declare global {
 	interface Window {
 		ymaps3: typeof ymaps3;
 		gpMapStore: {
-			map: YMap,
-			marker: Marker,
+			map?: YMap;
+			marker?: Marker | null;
+			popup?: YMapMarker | null;
+			popupClose?: () => void;
 		};
 	}
 }
@@ -21,7 +26,13 @@ declare global {
 
 export default defineComponent({
 	name: 'MainPage',
-	emits: ['ready'],
+	emits: ['ready', 'update:modelValue', 'select'],
+	props: {
+		modelValue: {
+			type: Array as PropType<Coordinates | null>,
+			default: null,
+		},
+	},
 	components: {},
 	computed: {
 		// ...mapStores(useAppStore),
@@ -29,10 +40,37 @@ export default defineComponent({
 	created() {},
 	data() {
 		return {
-			map: null as YMap | null
+			map: null as YMap | null,
+			marker: null as Marker | null,
 		};
 	},
+	watch: {
+		modelValue(value: Coordinates | null) {
+			if(!this.map) return;
+			if(!value || value.length !== 2) {
+				this.clearMarker();
+				return;
+			}
+			this.placeMarker(value, false);
+		},
+	},
 	methods: {
+		placeMarker(coords: Coordinates, emit = true) {
+			if(!this.map) return;
+			this.clearMarker();
+			this.marker = new Marker(this.map, coords);
+			if(emit) {
+				this.$emit('update:modelValue', coords);
+				this.$emit('select', coords);
+			}
+		},
+
+		clearMarker() {
+			if(!this.marker) return;
+			this.marker.destroy();
+			this.marker = null;
+		},
+
 		async waitForYmaps3(): Promise<typeof ymaps3> {
 			return new Promise((resolve, reject) => {
 				const timeout = 10000; // максимум 10 секунд
@@ -107,16 +145,36 @@ export default defineComponent({
 			map.addChild(new YMapDefaultSchemeLayer({}));
 			map.addChild(new YMapDefaultFeaturesLayer({}));
 
-			new Listener(map).init();
+			const listener = new Listener(map, (coordinates) => {
+				this.placeMarker(coordinates as Coordinates, true);
+			});
+			listener.init();
 
 			window.gpMapStore.map = this.map = map;
+			if(!window.gpMapStore.popupClose) {
+				window.gpMapStore.popupClose = () => {
+					const { map: currentMap, popup } = window.gpMapStore;
+					if(currentMap && popup) {
+						currentMap.removeChild(popup);
+						window.gpMapStore.popup = null;
+					}
+				};
+			}
+
+			if(this.modelValue && this.modelValue.length === 2) {
+				this.placeMarker(this.modelValue as Coordinates, false);
+			}
+
 			this.$emit('ready', map);
 		},
 	},
 	async mounted() {
 		if(!window.gpMapStore) window.gpMapStore = {};
 		await this.initMap();
-	}
+	},
+	beforeUnmount() {
+		this.clearMarker();
+	},
 });
 </script>
 
