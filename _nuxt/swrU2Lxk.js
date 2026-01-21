@@ -1,0 +1,1 @@
+class o{constructor(t,i){if(this.map=t,this.onSelect=i,!t)throw new Error("Map is not initialized")}init(){this.map.addChild(new ymaps3.YMapListener({onClick:((t,i)=>{const e=i?.coordinates;e&&this.onSelect?.(e)})}))}}export{o as Listener};
