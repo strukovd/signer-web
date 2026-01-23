@@ -1,7 +1,13 @@
 <template>
 	<section class="signature-page">
 		<main class="signature-pad-wrapper">
-			<template v-if="[`SHOW_DOCUMENT`, `SHOW_SIGNED_DOCUMENT`].includes(stage)">
+			<template v-if="error">
+				<section style="text-align:center; margin:4em 0; font-size:1.8em;">
+					<BaseIcon name="mdi-alert" fill="goldenrod" size="5em" />
+					<h2>{{ error }}</h2>
+				</section>
+			</template>
+			<template v-else-if="[`SHOW_DOCUMENT`, `SHOW_SIGNED_DOCUMENT`].includes(stage)">
 				<PDF v-if="documentContent" :source="documentContent"/>
 			</template>
 			<template v-else-if="stage === `TO_SIGN`">
@@ -31,6 +37,7 @@
 <script lang="ts" setup>
 const { $api } = useNuxtApp();
 import BaseButton from '~/components/common/BaseButton.vue';
+import BaseIcon from '~/components/common/BaseIcon.vue';
 
 type DocumentResult = { fileName: string; fileContent: string };
 
@@ -40,6 +47,7 @@ onMounted(() => {
 
 const appStore = useAppStore();
 const stage = ref(`SHOW_DOCUMENT`) as Ref<`SHOW_DOCUMENT` | `TO_SIGN` | `SHOW_SIGNED_DOCUMENT`>;
+const error = ref(null) as Ref<string | null>;
 let documentContent = ref(null) as Ref<any>;
 
 function next() {
@@ -81,9 +89,9 @@ async function fetchDocument() {
 
 			// documentContent.value = `data:application/pdf;base64,${data.fileContent}`;
 		})
-		// .catch((err: FetchError) => {
-		// 	error.value = err.message;
-		// });
+		.catch((err: any) => {
+			error.value = err?.data?.message ?? err?.response?.message ?? err;
+		});
 }
 
 async function toSignDocument() {

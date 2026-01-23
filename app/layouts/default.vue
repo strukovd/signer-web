@@ -16,7 +16,7 @@
 	& > [class$="page"] {
 		display: flex;
 		flex-direction: column;
-		min-height: calc(var(--vh, 1vh) * 100);
+		height: calc(var(--vh, 1vh) * 100);
 
 		>:first-child {
 			flex:auto 1 1;
