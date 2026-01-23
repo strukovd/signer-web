@@ -9,5 +9,6 @@ export type Page = {
 	params?: {
 		documentId?: number;
 		issueKey?: string;
+		coordinates?: string;
 	}
 }

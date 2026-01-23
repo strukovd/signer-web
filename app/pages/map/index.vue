@@ -16,8 +16,16 @@ import YaMap from './YaMap.vue';
 
 const { $api } = useNuxtApp();
 const appStore = useAppStore();
+const { issueKey, coordinates } = appStore.pageParams();
 const selectedCoordinates = ref<[number, number] | null>(null);
 
+
+onMounted(() => {
+	if(coordinates) {
+		const [x, y] = coordinates.split(',');
+		selectedCoordinates.value = [Number(x), Number(y)];
+	}
+});
 
 async function saveCoordinates() {
 	if(!selectedCoordinates.value) {
@@ -26,7 +34,6 @@ async function saveCoordinates() {
 	}
 
 	const coordinatesPayload = selectedCoordinates.value.join(',');
-	const issueKey = appStore.pageParams().issueKey;
 	const operator = appStore.login;
 
 	$api('v1/office-app/coordinates', {

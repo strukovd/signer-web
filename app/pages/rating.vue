@@ -38,7 +38,7 @@ async function rate(grade: number) {
 		method: 'POST',
 		body: {
 			issueKey,
-			grade: 10,
+			grade,
 			operator: operator,
 		},
 	})
