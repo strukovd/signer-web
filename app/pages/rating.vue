@@ -49,9 +49,9 @@ async function rate(grade: number) {
 			// 	navigateTo('/');
 			// }
 		})
-		// .catch((err: FetchError) => {
-		// 	error.value = err.message;
-		// });
+		.catch((err: FetchError) => {
+			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
+		});
 }
 </script>
 

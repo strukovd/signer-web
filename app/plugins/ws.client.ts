@@ -28,24 +28,33 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 	socket.on("connect", () => {
 		console.log("✅ Socket connected:", socket.id);
+		useAppStore().online = true;
 	});
 
 	socket.on("disconnect", () => {
 		console.log("🔌 Socket disconnected");
+		useAppStore().online = false;
 	});
 
 	socket.on("page", (data: SocketPagePayload) => {
 		// console.log(`Event: page`);
 		// console.log(data);
-		useAppStore().login = data.login;
-		useAppStore().currentUser = data.jiraUser;
-		useAppStore().pages = data.pages;
+		const appStore = useAppStore();
+		appStore.login = data.login;
+		appStore.currentUser = data.jiraUser;
+		appStore.pages = data.pages;
 	});
 
-	// socket.onAny((eventName, ...args) => {
-	// 	console.log(`Event: ${eventName}`);
-	// 	console.log(`Arguments:`, args);
-	// });
+	socket.onAny((eventName, ...args) => {
+		// console.log(`Event: ${eventName}`);
+		// console.log(`Arguments:`, args);
+		let message = eventName;
+		if( ['disconnected'].includes(eventName) ) message = `🔴 ${eventName}`;
+		useAppStore().signals.push(message);
+		setTimeout(() => {
+			useAppStore().signals.shift();
+		}, 5000);
+	});
 
 
 	socket.on("connect_error", (err) => {

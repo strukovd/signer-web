@@ -9,6 +9,10 @@ export const useAppStore = defineStore('app', {
 		login: null as string | null,
 		pages: [] as Page[],
 		pageOffset: 0,
+
+		signals: [] as any[],
+		online: false,
+		error: '' as any,
 	}),
 	actions: {
 		pageParams() {

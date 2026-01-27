@@ -90,6 +90,7 @@ async function fetchDocument() {
 			// documentContent.value = `data:application/pdf;base64,${data.fileContent}`;
 		})
 		.catch((err: any) => {
+			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
 			error.value = err?.data?.message ?? err?.response?.message ?? err;
 		});
 }
@@ -121,9 +122,10 @@ async function toSignDocument() {
 			});
 			documentContent.value = URL.createObjectURL(blob);
 		})
-		// .catch((err: FetchError) => {
-		// 	error.value = err.message;
-		// });
+		.catch((err: FetchError) => {
+			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
+			error.value = err?.data?.message ?? err?.response?.message ?? err;
+		});
 }
 
 const options = ref({

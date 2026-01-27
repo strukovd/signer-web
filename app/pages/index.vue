@@ -1,5 +1,5 @@
 <template>
-	<section class="index-page">
+	<section class="index-page" :class="{ offline: !appStore.online }">
 		<ClientOnly>
 			<swiper-container style="width:100%;" ref="swiper" direction="horizontal" effect="slide">
 				<swiper-slide v-for="(slide,i) of slides" :key="i" style="color:white;">
@@ -16,6 +16,7 @@
 
 <script lang="ts" setup>
 import BaseButton from '~/components/common/BaseButton.vue';
+const appStore = useAppStore();
 
 definePageMeta({
 	auth: true,
@@ -28,28 +29,19 @@ function closeSession() {
 
 const swiper = ref(null);
 const slides = [
-	// {
-	// 	title: `Кредитный продукт «Газификация»`,
-	// 	image: `https://files.gazprom.kg/images/banner/e75d27674bd27cd4e73b765cdb2a1adf4dfc92073d34d4f4423f01e9a6908bb6.jpg`,
-	// },
-	// {
-	// 	title: ``,
-	// 	image: `https://files.gazprom.kg/images/banner/97b119291434cab7eba1a1878df2ca1ae974ef1afddad1478c620ebd141a8923.jpg`
-	// },
-	{ image: `/banners/1.jpeg` },
-	{ image: `/banners/2.jpeg` },
-	{ image: `/banners/3.jpeg` },
-	{ image: `/banners/4.jpeg` },
-	{ image: `/banners/5.jpeg` },
-	{ image: `/banners/6.jpeg` },
-	{ image: `/banners/7.jpeg` },
-	{ image: `/banners/8.jpeg` },
+	{ image: `/banners/1.jpg` },
+	{ image: `/banners/2.jpg` },
+	{ image: `/banners/3.jpg` },
 ] as Record<string, any>[];
 </script>
 
 <style lang="scss">
 .index-page {
 	position: relative;
+
+	&.offline {
+		filter: grayscale(.8);
+	}
 
 	swiper-slide {
 		display: flex;

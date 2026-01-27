@@ -11,6 +11,9 @@ export default defineNuxtConfig({
 	modules: ['nuxt-signature-pad', '@pinia/nuxt', 'nuxt-swiper', '@vite-pwa/nuxt'],
 
 	nitro: { // Для генерации статических файлов
+		prerender: {
+			routes: ['/']
+		},
 		preset: 'github-pages',
 	},
 	app: {

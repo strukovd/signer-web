@@ -52,7 +52,7 @@ async function signIn() {
 			}
 		})
 		.catch((err: FetchError) => {
-			error.value = err.message;
+			error.value = err?.data?.message ?? err?.response?.message ?? err;
 		});
 }
 
