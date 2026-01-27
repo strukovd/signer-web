@@ -135,7 +135,7 @@ export default defineComponent({
 
 			const map = new YMap(el, {
 				location: {
-					center: [74.601572, 42.885146],
+					center: this.modelValue ?? [74.601572, 42.885146],
 					zoom: 10
 				},
 				behaviors: ['drag', 'scrollZoom']
