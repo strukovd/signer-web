@@ -22,6 +22,10 @@
 				/>
 			</template>
 			<template v-else-if="stage === `TO_SIGN`">
+				<div class="signature-hint">
+					<BaseIcon name="mdi-pencil"/>
+					<span> Нарисуйте подпись на экране</span>
+				</div>
 				<NuxtSignaturePad
 					ref="signaturePad"
 					width="100%"
@@ -106,7 +110,7 @@ async function fetchDocument() {
 }
 
 async function toSignDocument() {
-	const documentId = appStore.pageParams().documentId;
+	const { documentId, closeSubTask } = appStore.pageParams();
 	if(!documentId) return;
 
 	isPdfLoading.value = true;
@@ -116,7 +120,7 @@ async function toSignDocument() {
 	const formData = new FormData();
 	formData.append('files',  signatureFile);
 	formData.append('documentId', String(documentId));
-
+	formData.append('closeSubTask', String(closeSubTask));
 
 	$api(`v1/office-app/documents/signature`, {
 		method: 'POST',
@@ -232,6 +236,20 @@ function onPdfLoadingFailed(err: any) {
 	.signature-pad-wrapper {
 		position: relative;
 		flex:auto 1 0;
+	}
+
+	.signature-hint {
+		position: absolute;
+		width:100%;
+		text-align: center;
+		z-index: 3;
+		padding: .4em 0;
+		font-size: 1.2em;
+		font-weight: 700;
+		color: #183d6d;
+		background: rgba(255, 255, 255, 0.5);
+		backdrop-filter: blur(6px);
+		border-radius: 6px;
 	}
 
 	.pdf-loader {
