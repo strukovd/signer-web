@@ -10,5 +10,6 @@ export type Page = {
 		documentId?: number;
 		issueKey?: string;
 		coordinates?: string;
+		closeSubTask?: boolean;
 	}
 }

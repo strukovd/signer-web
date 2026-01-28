@@ -10,9 +10,9 @@
 			<section v-if="!appStore.online" class="is-online">
 				<div class="glass" @dblclick="onOfflineDblClick">🔴 Отключен</div>
 			</section>
-			<section class="error-message" v-if="appStore.error">
+			<!-- <section class="error-message" v-if="appStore.error">
 				<div class="glass">{{ appStore.error }}</div>
-			</section>
+			</section> -->
 		</footer>
 	</section>
 </template>

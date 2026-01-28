@@ -65,9 +65,11 @@ const isPdfLoading = ref(false);
 function next() {
 	switch(stage.value) {
 		case `SHOW_DOCUMENT`:
+			clearDocumentContent();
 			stage.value = `TO_SIGN`;
 			break;
 		case `TO_SIGN`:
+			clearDocumentContent();
 			toSignDocument();
 			stage.value = `SHOW_SIGNED_DOCUMENT`;
 			break;
@@ -185,6 +187,13 @@ function setDocumentContent(url: string) {
 		URL.revokeObjectURL(documentContent.value);
 	}
 	documentContent.value = url;
+}
+
+function clearDocumentContent() {
+	if (typeof documentContent.value === 'string' && documentContent.value.startsWith('blob:')) {
+		URL.revokeObjectURL(documentContent.value);
+	}
+	documentContent.value = null;
 }
 
 function resetSignatureState() {
