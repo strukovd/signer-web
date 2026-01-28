@@ -52,10 +52,6 @@ import BaseIcon from '~/components/common/BaseIcon.vue';
 
 type DocumentResult = { fileName: string; fileContent: string };
 
-onMounted(() => {
-	fetchDocument();
-});
-
 const appStore = useAppStore();
 const stage = ref(`SHOW_DOCUMENT`) as Ref<`SHOW_DOCUMENT` | `TO_SIGN` | `SHOW_SIGNED_DOCUMENT`>;
 const error = ref(null) as Ref<string | null>;
@@ -98,7 +94,7 @@ async function fetchDocument() {
 			const blob = new Blob([Uint8Array.from(atob(data.fileContent), c => c.charCodeAt(0))], {
 				type: 'application/pdf',
 			});
-			documentContent.value = URL.createObjectURL(blob);
+			setDocumentContent(URL.createObjectURL(blob));
 
 			// documentContent.value = `data:application/pdf;base64,${data.fileContent}`;
 		})
@@ -135,7 +131,7 @@ async function toSignDocument() {
 			const blob = new Blob([Uint8Array.from(atob(data.fileContent), c => c.charCodeAt(0))], {
 				type: 'application/pdf',
 			});
-			documentContent.value = URL.createObjectURL(blob);
+			setDocumentContent(URL.createObjectURL(blob));
 		})
 		.catch((err: FetchError) => {
 			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
@@ -179,6 +175,40 @@ const handleAddWaterMark = () => {
     sy: 200                     // stroke positionY, > default 40
   });
 }
+
+function setDocumentContent(url: string) {
+	if (typeof documentContent.value === 'string' && documentContent.value.startsWith('blob:')) {
+		URL.revokeObjectURL(documentContent.value);
+	}
+	documentContent.value = url;
+}
+
+function resetSignatureState() {
+	if (typeof documentContent.value === 'string' && documentContent.value.startsWith('blob:')) {
+		URL.revokeObjectURL(documentContent.value);
+	}
+	documentContent.value = null;
+	error.value = null;
+	isPdfLoading.value = false;
+	stage.value = 'SHOW_DOCUMENT';
+	if (signaturePad.value?.clearCanvas) {
+		signaturePad.value.clearCanvas();
+	}
+}
+
+watch(
+	() => [
+		appStore.pageOffset,
+		appStore.pages.length,
+		appStore.pages[appStore.pageOffset]?.type,
+		appStore.pageParams().documentId,
+	],
+	() => {
+		resetSignatureState();
+		fetchDocument();
+	},
+	{ immediate: true }
+);
 
 function onPdfLoaded() {
 	// документ загружен, ждём рендеринга
