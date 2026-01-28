@@ -6,12 +6,12 @@
 			</section>
 		</header>
 		<slot />
-		<footer>
-			<section v-if="!appStore.online" class="isOnline">
-				<div class="glass">🔴 Отключен</div>
+		<footer style="user-select:none;">
+			<section v-if="!appStore.online" class="is-online">
+				<div class="glass" @dblclick="onOfflineDblClick">🔴 Отключен</div>
 			</section>
-			<section class="error" v-if="appStore.error">
-				<div>{{ appStore.error }}</div>
+			<section class="error-message" v-if="appStore.error">
+				<div class="glass">{{ appStore.error }}</div>
 			</section>
 		</footer>
 	</section>
@@ -20,6 +20,7 @@
 <script lang="ts" setup>
 import { onMounted, onBeforeUnmount } from "vue";
 const appStore = useAppStore();
+const { $socket } = useNuxtApp();
 let wakeLock: WakeLockSentinel | null = null;
 
 async function requestWakeLock() {
@@ -68,6 +69,11 @@ onBeforeUnmount(() => {
 	document.removeEventListener("visibilitychange", onVisibilityChange);
 	releaseWakeLock();
 });
+
+function onOfflineDblClick() {
+	if (appStore.online) return;
+	$socket?.connect();
+}
 </script>
 
 <style lang="scss">
@@ -113,7 +119,7 @@ onBeforeUnmount(() => {
 		left: 0;
 		z-index: 99;
 
-		.isOnline {
+		.is-online, .error-message {
 			display: flex;
 			justify-content: center;
 			align-items: center;
