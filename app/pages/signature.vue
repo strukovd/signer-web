@@ -145,8 +145,8 @@ async function toSignDocument() {
 }
 
 const options = ref({
-  penColor: '#183d6d',
-  backgroundColor: 'rgb(255, 255, 255)',
+  penColor: '#000000',
+  backgroundColor: 'rgba(0, 0, 0, 0)',
   maxWidth: 4,
   minWidth: 1,
 });
