@@ -8,7 +8,18 @@
 				</section>
 			</template>
 			<template v-else-if="[`SHOW_DOCUMENT`, `SHOW_SIGNED_DOCUMENT`].includes(stage)">
-				<PDF v-if="documentContent" :source="documentContent"/>
+				<div v-if="isPdfLoading" class="pdf-loader">
+					<BaseIcon name="mdi-loading" size="3em" />
+					<span>Загрузка документа...</span>
+				</div>
+				<PDF
+					v-if="documentContent"
+					:source="documentContent"
+					@loaded="onPdfLoaded"
+					@rendered="onPdfRendered"
+					@loading-failed="onPdfLoadingFailed"
+					@rendering-failed="onPdfLoadingFailed"
+				/>
 			</template>
 			<template v-else-if="stage === `TO_SIGN`">
 				<NuxtSignaturePad
@@ -49,6 +60,7 @@ const appStore = useAppStore();
 const stage = ref(`SHOW_DOCUMENT`) as Ref<`SHOW_DOCUMENT` | `TO_SIGN` | `SHOW_SIGNED_DOCUMENT`>;
 const error = ref(null) as Ref<string | null>;
 let documentContent = ref(null) as Ref<any>;
+const isPdfLoading = ref(false);
 
 function next() {
 	switch(stage.value) {
@@ -76,6 +88,7 @@ async function fetchDocument() {
 	const documentId = appStore.pageParams().documentId;
 	if(!documentId) return;
 
+	isPdfLoading.value = true;
 	$api(`v1/office-app/documents`, {
 		method: 'GET',
 		params: { documentId },
@@ -92,6 +105,7 @@ async function fetchDocument() {
 		.catch((err: any) => {
 			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
 			error.value = err?.data?.message ?? err?.response?.message ?? err;
+			isPdfLoading.value = false;
 		});
 }
 
@@ -99,6 +113,7 @@ async function toSignDocument() {
 	const documentId = appStore.pageParams().documentId;
 	if(!documentId) return;
 
+	isPdfLoading.value = true;
 	const signature = signaturePad.value.saveSignature();
 	const signatureFile = await base64ToFile(signature, 'signature.png', 'image/png');
 
@@ -125,6 +140,7 @@ async function toSignDocument() {
 		.catch((err: FetchError) => {
 			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
 			error.value = err?.data?.message ?? err?.response?.message ?? err;
+			isPdfLoading.value = false;
 		});
 }
 
@@ -163,6 +179,22 @@ const handleAddWaterMark = () => {
     sy: 200                     // stroke positionY, > default 40
   });
 }
+
+function onPdfLoaded() {
+	// документ загружен, ждём рендеринга
+}
+
+function onPdfRendered() {
+	isPdfLoading.value = false;
+}
+
+function onPdfLoadingFailed(err: any) {
+	isPdfLoading.value = false;
+	if (!error.value) {
+		appStore.error = err?.message ?? err;
+		error.value = err?.message ?? err;
+	}
+}
 </script>
 
 <style lang="scss">
@@ -170,6 +202,25 @@ const handleAddWaterMark = () => {
 	.signature-pad-wrapper {
 		position: relative;
 		flex:auto 1 0;
+	}
+
+	.pdf-loader {
+		position: absolute;
+		inset: 0;
+		z-index: 5;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.6em;
+		font-size: 1.3em;
+		font-weight: 600;
+		background: rgba(255, 255, 255, 0.7);
+		backdrop-filter: blur(6px);
+		color: #183d6d;
+	}
+
+	.pdf-loader :deep(svg) {
+		animation: pdf-spin 1.2s linear infinite;
 	}
 
 	.footer {
@@ -182,5 +233,10 @@ const handleAddWaterMark = () => {
 			}
 		}
 	}
+}
+
+@keyframes pdf-spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
 }
 </style>

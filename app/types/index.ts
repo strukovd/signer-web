@@ -5,7 +5,7 @@ export type SocketPagePayload = {
 };
 
 export type Page = {
-	type: 'FINISH' | 'PDF' | 'RATING' | 'SIGNATURE' | 'COORDINATE' | 'DEFAULT', // (-> MAP)
+	type: 'FINISH' | 'RATING' | 'SIGNATURE' | 'COORDINATE' | 'DEFAULT', // (-> MAP)
 	params?: {
 		documentId?: number;
 		issueKey?: string;

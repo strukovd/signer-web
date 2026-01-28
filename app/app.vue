@@ -20,7 +20,6 @@ const route = useRoute();
 
 const pageRoutes: Record<Page['type'], string> = {
 	FINISH: '/finish',
-	PDF: '/pdf',
 	RATING: '/rating',
 	SIGNATURE: '/signature',
 	COORDINATE: '/map',
