@@ -46,21 +46,26 @@ export default defineNuxtConfig({
 		},
 	},
 
-	// pwa: {
-	// 	manifest: {
-	// 		name: "OfficeApp",
-	// 		short_name: "OfficeApp",
-	// 		start_url: "/signer-web/",
-	// 		display: "standalone",
-	// 		theme_color: "#4A90E2",
-	// 		icons: [
-	// 			{
-	// 				src: "icon-192x192.webp",
-	// 				sizes: "192x192",
-	// 				type: "image/webp"
-	// 			}
-	// 		]
-	// 	},
-	// 	registerType: 'autoUpdate'
-	// }
+	pwa: {
+		manifest: {
+			name: "OfficeApp",
+			short_name: "OfficeApp",
+			start_url: "/",
+			display: "standalone",
+			theme_color: "#333333",
+			icons: [
+				{
+					src: "icon-192x192.webp",
+					sizes: "192x192",
+					type: "image/webp"
+				}
+			]
+		},
+		registerType: 'autoUpdate',
+		workbox: {
+			cleanupOutdatedCaches: true, // 🔥 удаляет старые кэши
+			clientsClaim: true,          // 🔥 новый SW сразу управляет страницами
+			skipWaiting: true,           // 🔥 НЕ ждёт перезапуска
+		}
+	}
 })
