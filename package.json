@@ -2,7 +2,7 @@
   "name": "signer-web",
   "type": "module",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.8",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
