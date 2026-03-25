@@ -138,7 +138,7 @@ export default defineComponent({
 					center: this.modelValue ?? [74.601572, 42.885146],
 					zoom: 10
 				},
-				behaviors: ['drag', 'scrollZoom']
+				behaviors: ['drag', 'scrollZoom', 'pinchZoom', 'dblClickZoom']
 			});
 
 			// Добавляем слой для отображения схематической карты
