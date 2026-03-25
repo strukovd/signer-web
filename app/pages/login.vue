@@ -48,7 +48,7 @@ async function signIn() {
 		.then((data) => {
 			if(data.accessToken) {
 				useUserStore().setData(data);
-				navigateTo('/');
+				navigateTo('/', { external: true });
 			}
 		})
 		.catch((err: FetchError) => {
