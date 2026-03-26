@@ -1,7 +1,7 @@
 <template>
 	<section class="index-page" :class="{ offline: !appStore.online }">
 		<ClientOnly>
-			<swiper-container style="width:100%;" ref="swiper" direction="horizontal" effect="slide">
+			<swiper-container  style="width:100%;" ref="swiper" direction="horizontal" effect="slide" :autoplay="{ delay: 5000, disableOnInteraction: false }" :loop="true" :speed="500">
 				<swiper-slide v-for="(slide,i) of slides" :key="i" style="color:white;">
 					<section class="slide-section">
 						<h2 v-if="slide?.title" class="slide-title">{{ slide.title }}</h2>
