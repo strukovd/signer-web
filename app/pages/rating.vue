@@ -2,20 +2,17 @@
 	<section class="rating-page">
 		<main>
 			<section>
-				<div class="rating-title">Оцените качество работы оператора</div>
+				<div class="rating-title">Просим Вас <br/>оценить качество обслуживания</div>
 				<div v-if="appStore.currentUser?.fullName" class="rating-username">
 					<span>{{ appStore.currentUser.fullName }}</span>
 				</div>
 			</section>
 			<section>
 				<div class="grades">
-					<div v-for="(color, index) of [ `#d30327`, `#ea0b0c`, `#f13609`, `#f97604`, `#f6b304`, `#f7dd04`, `#cedd12`, `#8ad523`, `#44bc37`, `#14ab4a` ]"
-						:key="index"
-						:style="{ background: color }"
-						class="grade"
-						@click="rate(index + 1)">
-							{{ index + 1 }}
-						</div>
+					<div v-for="(color, index) of [ `#d30327`, `#f97604`, `#f7dd04`, `#8ad523`, `#14ab4a` ]" :key="index" class="grade" @click="rate( (index+1)*2 )">
+						<img :src="`/smiles/${index + 1}.svg`">
+						<div class="underline" :style="{ background: color }"></div>
+					</div>
 				</div>
 			</section>
 		</main>
@@ -23,10 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import BaseIcon from '~/components/common/BaseIcon.vue';
-
 const { $api } = useNuxtApp();
-
 const appStore = useAppStore();
 
 async function rate(grade: number) {
@@ -70,7 +64,7 @@ async function rate(grade: number) {
 			.rating-title {
 				margin-bottom:.3em;
 				text-align: center;
-				font-size: 2.4em;
+				font-size: 3.0dvw;
 				font-weight: 700;
 			}
 			.rating-username {
@@ -87,21 +81,44 @@ async function rate(grade: number) {
 				flex-direction: row;
 				justify-content: center;
 				align-items: end;
-				gap: 1em;
+				// gap: 1em;
 
 
 				.grade {
 					text-align: center;
-					line-height: 2em;
 					width:2em;
 					color: #fff;
-					font-size:3.4dvw;
-					text-align: center;
-					border-radius:30%;
+					font-size:3.6dvw;
 					cursor: pointer;
+					display:flex;
+					flex-direction:column;
+					gap:.4em;
 
 					&:hover {
 						opacity: .7;
+					}
+
+					img {
+						margin:0 .1em;
+					}
+
+					.underline {
+						display: inline-block;
+						background: #0079C1;
+						height: .3em;
+						width: 100%;
+
+					}
+					$bradius: 6px;
+					&:first-child {
+						.underline {
+							border-radius: $bradius 0 0 $bradius;
+						}
+					}
+					&:last-child {
+						.underline {
+							border-radius: 0 $bradius $bradius 0;
+						}
 					}
 				}
 			}

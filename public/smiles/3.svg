@@ -1,0 +1,10 @@
+<svg enable-background="new 0 0 2400 700" version="1.1" viewBox="0 0 700 700" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+	<style type="text/css">
+		.e3-st0{fill:#FFCF15;stroke:#333333;}
+		.e3-st1{fill:#444444;stroke:#333333;}
+		.e3-st2{fill:#383838;stroke:#333333;}
+	</style>
+	<path class="e3-st0" d="M350,0C156.7,0,0,156.7,0,350s156.7,350,350,350s350-156.7,350-350S543.3,0,350,0z"/>
+		<path class="e3-st1" d="m213.2 533h275c19-11 18-36-1-48h-275c-20 11-18 39 1 48z"/>
+	<path class="e3-st2" d="m220 228c-24.3 0-44 19.7-44 44s19.7 44 44 44 44-19.7 44-44-19.7-44-44-44m260 0c-24.3 0-44 19.7-44 44s19.7 44 44 44 44-19.7 44-44-19.7-44-44-44z"/>
+</svg>
