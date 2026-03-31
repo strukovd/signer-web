@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 		'@mdi/font/css/materialdesignicons.min.css',
 	],
 
-	modules: ['nuxt-signature-pad', '@pinia/nuxt', 'nuxt-swiper', '@vite-pwa/nuxt'],
+	modules: ['nuxt-signature-pad', '@pinia/nuxt', 'nuxt-swiper', '@vite-pwa/nuxt', 'nuxt-toast'],
 
 	nitro: { // Для генерации статических файлов
 		prerender: {
@@ -26,7 +26,7 @@ export default defineNuxtConfig({
 			],
 			meta: [
 				{ charset: 'utf-8' },
-				{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
+				{ name: 'viewport', content: 'width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no' },
 				{ name: 'theme-color', content: 'transparent' },
 				{ name: 'mobile-web-app-capable', content: 'yes' },
 				{ name: 'apple-mobile-web-app-capable', content: 'yes' },

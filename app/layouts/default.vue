@@ -1,26 +1,17 @@
 <template>
 	<section class="default-layout">
-		<header>
+		<!-- <header>
 			<section class="signals" v-if="Array.isArray(appStore.signals) && appStore.signals.length">
 				<div v-for="(signal, index) of appStore.signals" :key="index" class="signal-message glass">{{ /^[^А-Яа-яЁё0-9A-Za-z_ ]/.test(String(signal)) ? signal : `🟢 ${signal}` }}</div>
 			</section>
-		</header>
+		</header> -->
 		<slot />
-		<footer style="user-select:none;">
-			<section v-if="!appStore.online" class="is-online">
-				<div class="glass" @dblclick="onOfflineDblClick">🔴 Отключен</div>
-			</section>
-			<!-- <section class="error-message" v-if="appStore.error">
-				<div class="glass">{{ appStore.error }}</div>
-			</section> -->
-		</footer>
 	</section>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, onBeforeUnmount } from "vue";
 const appStore = useAppStore();
-const { $socket } = useNuxtApp();
 let wakeLock: WakeLockSentinel | null = null;
 
 async function requestWakeLock() {
@@ -72,7 +63,7 @@ onBeforeUnmount(() => {
 
 function onOfflineDblClick() {
 	if (appStore.online) return;
-	$socket?.connect();
+	useNuxtApp().$socket?.connect();
 }
 </script>
 
@@ -109,21 +100,6 @@ function onOfflineDblClick() {
 			// padding-bottom: calc(1em + env(safe-area-inset-bottom));
 			display:flex;
 			margin-top: auto;
-		}
-	}
-
-	> footer {
-		position: absolute;
-		bottom: 0;
-		right: 0;
-		left: 0;
-		z-index: 99;
-
-		.is-online, .error-message {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			padding: 2em;
 		}
 	}
 

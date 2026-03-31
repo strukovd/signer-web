@@ -9,7 +9,10 @@
 					</section>
 				</swiper-slide>
 			</swiper-container>
-			<BaseButton class="close-session-button" @click="closeSession" prependIcon="mdi-logout">Завершить сессию</BaseButton>
+			<aside class="aside-buttons">
+				<BaseButton v-if="!appStore.online" class="aside-button" @click="reconnect">🔴 Переподключится</BaseButton>
+				<BaseButton class="aside-button" @click="closeSession" prependIcon="mdi-logout">Завершить сессию</BaseButton>
+			</aside>
 		</ClientOnly>
 	</section>
 </template>
@@ -25,6 +28,10 @@ definePageMeta({
 function closeSession() {
 	const user = useUserStore();
 	user.loguot();
+}
+
+function reconnect() {
+	useNuxtApp().$socket?.connect();
 }
 
 const swiper = ref(null);
@@ -73,17 +80,23 @@ const slides = [
 		}
 	}
 
-	.close-session-button {
+	.aside-buttons {
 		z-index: 9999;
-		backdrop-filter: blur(10px);
-		box-shadow:0 0 4px rgba(0,0,0,0.1);
-		background-color: #ffffff44 !important;
-		color: #333 !important;
-		font-weight:700 !important;
 		position: absolute;
 		bottom: 1em;
 		right: 1em;
 		// transform: translateX(-50%);
+		display:flex;
+		flex-direction:row;
+		gap:.4em;
+
+		.aside-button {
+			backdrop-filter: blur(10px);
+			box-shadow:0 0 4px rgba(0,0,0,0.1);
+			background-color: #ffffff44 !important;
+			color: #333 !important;
+			font-weight:700 !important;
+		}
 
 		.button-text {
 			font-weight:700;

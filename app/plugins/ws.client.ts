@@ -42,11 +42,31 @@ export default defineNuxtPlugin((nuxtApp) => {
 		appStore.pageOffset = 0;
 		appStore.login = data.login;
 		appStore.currentUser = data.jiraUser;
+
+		useToast().show({
+			title: "Загрузка страницы",
+			position: "topRight",
+			pauseOnHover: true,
+			color: "green",
+			transitionIn: "fadeIn",
+			transitionOut: "fadeOut",
+		});
 	});
 
 	socket.onAny((eventName, ...args) => {
+		// useToast().show({
+		// 	title: eventName,
+		// 	message: JSON.stringify(args),
+		// 	position: "topRight",
+		// 	color: "green",
+		// 	pauseOnHover: true,
+		// 	transitionIn: "fadeIn",
+		// 	transitionOut: "fadeOut",
+		// });
+
 		// console.log(`Event: ${eventName}`);
 		// console.log(`Arguments:`, args);
+
 		let message = eventName;
 		if( ['disconnected'].includes(eventName) ) message = `🔴 ${eventName}`;
 		useAppStore().signals.push(message);
