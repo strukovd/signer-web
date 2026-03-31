@@ -9,7 +9,7 @@
 			</template>
 			<template v-else-if="[`SHOW_DOCUMENT`, `SHOW_SIGNED_DOCUMENT`].includes(stage)">
 				<div v-if="isPdfLoading" class="pdf-loader">
-					<BaseIcon name="mdi-loading" size="3em" />
+					<BaseIcon class="pdf-loader__icon" name="mdi-loading" size="3em" />
 					<span>Загрузка документа...</span>
 				</div>
 				<PDF
@@ -274,6 +274,16 @@ function onPdfLoadingFailed(err: any) {
 		background: rgba(255, 255, 255, 0.7);
 		backdrop-filter: blur(6px);
 		color: #183d6d;
+	}
+
+	.pdf-loader__icon {
+		flex: 0 0 auto;
+		animation: pdf-spin 1.2s linear infinite;
+	}
+
+	.pdf-loader__icon :deep(svg),
+	.pdf-loader__icon :deep(i) {
+		display: block;
 	}
 
 	.pdf-loader :deep(svg) {
