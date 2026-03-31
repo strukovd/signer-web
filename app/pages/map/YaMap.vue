@@ -1,9 +1,19 @@
 <template>
 	<div class="map-root">
-		<div class="map-search">
-			<div class="map-search__field">
+		<div class="map-search" :class="{ 'map-search_expanded': isSearchExpanded }">
+			<button
+				v-if="!isSearchExpanded"
+				type="button"
+				class="map-search__toggle"
+				aria-label="Открыть поиск"
+				@click="openSearch"
+			>
 				<span class="map-search__icon" aria-hidden="true">⌕</span>
+			</button>
+
+			<div v-else class="map-search__field">
 				<input
+					ref="searchInput"
 					v-model.trim="searchQuery"
 					type="text"
 					class="map-search__input"
@@ -14,6 +24,14 @@
 					@keydown="onSearchKeydown"
 					@blur="onSearchBlur"
 				/>
+				<button
+					type="button"
+					class="map-search__icon-button"
+					aria-label="Свернуть поиск"
+					@click="collapseSearch"
+				>
+					<span class="map-search__icon" aria-hidden="true">⌕</span>
+				</button>
 			</div>
 
 			<div
@@ -43,8 +61,8 @@
 					:key="result.id"
 					type="button"
 					class="map-search__result"
-					@mousedown.prevent="selectSearchResult(result)"
-					@touchstart.prevent="selectSearchResult(result)"
+					@click.prevent="selectSearchResult(result)"
+					@touchend="selectSearchResult(result)"
 				>
 					<span class="map-search__result-title">{{ result.title }}</span>
 					<span v-if="result.description" class="map-search__result-description">
@@ -104,6 +122,7 @@ export default defineComponent({
 			isSearching: false,
 			searchError: '',
 			isSearchFocused: false,
+			isSearchExpanded: false,
 			searchDebounceTimer: null as ReturnType<typeof setTimeout> | null,
 			searchRequestId: 0,
 		};
@@ -150,8 +169,28 @@ export default defineComponent({
 			this.marker = null;
 		},
 
+		openSearch() {
+			this.isSearchExpanded = true;
+			this.isSearchFocused = true;
+			this.$nextTick(() => {
+				const input = this.$refs.searchInput as HTMLInputElement | undefined;
+				input?.focus();
+			});
+		},
+
+		collapseSearch() {
+			this.isSearchFocused = false;
+			if(this.searchDebounceTimer) {
+				clearTimeout(this.searchDebounceTimer);
+				this.searchDebounceTimer = null;
+			}
+			this.isSearching = false;
+			this.isSearchExpanded = false;
+		},
+
 		onSearchInput() {
 			this.searchError = '';
+			this.isSearchExpanded = true;
 			this.isSearchFocused = true;
 
 			if(this.searchDebounceTimer) {
@@ -171,12 +210,16 @@ export default defineComponent({
 		},
 
 		onSearchFocus() {
+			this.isSearchExpanded = true;
 			this.isSearchFocused = true;
 		},
 
 		onSearchBlur() {
 			window.setTimeout(() => {
 				this.isSearchFocused = false;
+				if(!this.normalizedSearchQuery) {
+					this.isSearchExpanded = false;
+				}
 			}, 100);
 		},
 
@@ -195,7 +238,7 @@ export default defineComponent({
 			}
 
 			if(event.key === 'Escape') {
-				this.isSearchFocused = false;
+				this.collapseSearch();
 			}
 		},
 
@@ -266,6 +309,7 @@ export default defineComponent({
 			const coordinates = [...result.coordinates] as Coordinates;
 
 			this.isSearchFocused = false;
+			this.isSearchExpanded = false;
 
 			map.update({
 				location: {
@@ -411,7 +455,14 @@ export default defineComponent({
 	top: 12px;
 	right: 12px;
 	z-index: 1000;
-	width: min(360px, calc(100vw - 24px));
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	width: fit-content;
+
+	&_expanded {
+		width: min(360px, calc(100vw - 24px));
+	}
 
 	&__field {
 		display: flex;
@@ -423,6 +474,32 @@ export default defineComponent({
 		background: rgba(255, 255, 255, 0.96);
 		box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
 		backdrop-filter: blur(8px);
+	}
+
+	&__toggle,
+	&__icon-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		padding: 0;
+		border: 1px solid #d9dde7;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.96);
+		box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+		cursor: pointer;
+		backdrop-filter: blur(8px);
+	}
+
+	&__icon-button {
+		flex: 0 0 auto;
+		width: 24px;
+		height: 24px;
+		border: 0;
+		border-radius: 8px;
+		background: transparent;
+		box-shadow: none;
 	}
 
 	&__icon {
@@ -445,6 +522,7 @@ export default defineComponent({
 
 	&__results {
 		margin-top: 8px;
+		width: 100%;
 		overflow: hidden;
 		border: 1px solid #d9dde7;
 		border-radius: 12px;
