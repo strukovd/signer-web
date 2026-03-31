@@ -14,7 +14,7 @@ export default defineNuxtConfig({
 		prerender: {
 			routes: ['/']
 		},
-		preset: 'github-pages',
+		preset: 'static',
 	},
 	app: {
 		baseURL: process.env.BASE_URL ?? '/',
@@ -66,6 +66,7 @@ export default defineNuxtConfig({
 			cleanupOutdatedCaches: true, // 🔥 удаляет старые кэши
 			clientsClaim: true,          // 🔥 новый SW сразу управляет страницами
 			skipWaiting: true,           // 🔥 НЕ ждёт перезапуска
+			navigateFallback: null,      // 🔥 ОТКЛЮЧАЕМ попытки SW подменять навигацию на "/"
 		}
 	}
 })
