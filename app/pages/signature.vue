@@ -51,6 +51,7 @@
 
 <script lang="ts" setup>
 const { $api } = useNuxtApp();
+import type { FetchError } from 'ofetch';
 import BaseButton from '~/components/common/BaseButton.vue';
 import BaseIcon from '~/components/common/BaseIcon.vue';
 
@@ -104,7 +105,16 @@ async function fetchDocument() {
 
 			// documentContent.value = `data:application/pdf;base64,${data.fileContent}`;
 		})
-		.catch((err: any) => {
+		.catch((err: FetchError) => {
+			useToast().show({
+				message: err?.data?.message ?? err?.response?.message ?? err,
+				position: "topRight",
+				pauseOnHover: true,
+				timeout: 10000,
+				color: "red",
+				transitionIn: "fadeIn",
+				transitionOut: "fadeOut",
+			});
 			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
 			error.value = err?.data?.message ?? err?.response?.message ?? err;
 			isPdfLoading.value = false;
@@ -140,6 +150,15 @@ async function toSignDocument() {
 			setDocumentContent(URL.createObjectURL(blob));
 		})
 		.catch((err: FetchError) => {
+			useToast().show({
+				message: err?.data?.message ?? err?.response?.message ?? err,
+				position: "topRight",
+				pauseOnHover: true,
+				timeout: 10000,
+				color: "red",
+				transitionIn: "fadeIn",
+				transitionOut: "fadeOut",
+			});
 			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
 			error.value = err?.data?.message ?? err?.response?.message ?? err;
 			isPdfLoading.value = false;

@@ -20,6 +20,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { FetchError } from 'ofetch';
 const { $api } = useNuxtApp();
 const appStore = useAppStore();
 
@@ -36,7 +37,7 @@ async function rate(grade: number) {
 			operator: operator,
 		},
 	})
-		.then((data) => {
+		.then((data: any) => {
 			appStore.nextPage();
 			// if(data.accessToken) {
 			// 	useUserStore().setData(data);
@@ -44,6 +45,15 @@ async function rate(grade: number) {
 			// }
 		})
 		.catch((err: FetchError) => {
+			useToast().show({
+				message: err?.data?.message ?? err?.response?.message ?? err,
+				position: "topRight",
+				pauseOnHover: true,
+				timeout: 10000,
+				color: "red",
+				transitionIn: "fadeIn",
+				transitionOut: "fadeOut",
+			});
 			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
 		});
 }

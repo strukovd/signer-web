@@ -11,6 +11,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import type { FetchError } from 'ofetch';
 import BaseButton from '~/components/common/BaseButton.vue';
 import YaMap from './YaMap.vue';
 
@@ -45,7 +46,7 @@ async function saveCoordinates() {
 			operator: operator,
 		},
 	})
-		.then((data) => {
+		.then((data: any) => {
 			appStore.nextPage();
 			// if(data.accessToken) {
 			// 	useUserStore().setData(data);
@@ -53,6 +54,15 @@ async function saveCoordinates() {
 			// }
 		})
 		.catch((err: FetchError) => {
+			useToast().show({
+				message: err?.data?.message ?? err?.response?.message ?? err,
+				position: "topRight",
+				pauseOnHover: true,
+				timeout: 10000,
+				color: "red",
+				transitionIn: "fadeIn",
+				transitionOut: "fadeOut",
+			});
 			appStore.error = err?.data?.message ?? err?.response?.message ?? err;
 		});
 }

@@ -22,7 +22,7 @@
 			<BaseTextBox v-model="login" appendIcon="mdi-account" placeholder="Логин" autofocus/>
 			<BaseTextBox v-model="password" type="password" appendIcon="mdi-lock" placeholder="Пароль"/>
 			<div v-if="error" style="color:red; text-align:center; font-size:.9em">{{ error }}</div>
-			<BaseButton @click="signIn" style="line-height:2em; text-align:center;">Войти</BaseButton>
+			<BaseButton @click="signIn" style="line-height:2em; text-align:center;">Войти</BaseButton>
 		</form>
 	</section>
 </template>
@@ -45,13 +45,22 @@ async function signIn() {
 		method: 'POST',
 		body: { login: login.value, password: password.value },
 	})
-		.then((data) => {
+		.then((data: any) => {
 			if(data.accessToken) {
 				useUserStore().setData(data);
 				navigateTo('/', { external: true });
 			}
 		})
 		.catch((err: FetchError) => {
+			useToast().show({
+				message: err?.data?.message ?? err?.response?.message ?? err,
+				position: "topRight",
+				pauseOnHover: true,
+				timeout: 10000,
+				color: "red",
+				transitionIn: "fadeIn",
+				transitionOut: "fadeOut",
+			});
 			error.value = err?.data?.message ?? err?.response?.message ?? err;
 		});
 }
