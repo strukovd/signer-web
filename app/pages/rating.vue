@@ -74,7 +74,7 @@ async function rate(grade: number) {
 			.rating-title {
 				margin-bottom:.3em;
 				text-align: center;
-				font-size: 3.0dvw;
+				font-size: 5dvw;
 				font-weight: 700;
 			}
 			.rating-username {
@@ -96,7 +96,7 @@ async function rate(grade: number) {
 
 				.grade {
 					text-align: center;
-					width:2em;
+					width:4em;
 					color: #fff;
 					font-size:3.6dvw;
 					cursor: pointer;
